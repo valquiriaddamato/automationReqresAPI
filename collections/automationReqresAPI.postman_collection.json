@@ -1,0 +1,452 @@
+{
+	"info": {
+		"_postman_id": "60fcd039-9a14-44db-9986-7461bf182b08",
+		"name": "AutomationReqresAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "CreateUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully create user\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"User data successfully returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"id\",\"name\",\"job\",\"createdAt\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Val\",\n    \"job\": \"QA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_Base}}/api/users",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ViewSingleUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully view single user\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User id 1 returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include('\"id\":1');",
+									"});",
+									"",
+									"pm.test(\"User data successfully returned\", function () {",
+									"    pm.response.to.have.body('{\"data\":{\"id\":1,\"email\":\"george.bluth@reqres.in\",\"first_name\":\"George\",\"last_name\":\"Bluth\",\"avatar\":\"https://reqres.in/img/faces/1-image.jpg\"},\"support\":{\"url\":\"https://reqres.in/#support-heading\",\"text\":\"To keep ReqRes free, contributions towards server costs are appreciated!\"}}');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_Base}}/api/users/1",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ViewMoreUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully view more users\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Users ids returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include('\"id\":1');",
+									"    pm.expect(pm.response.text()).to.include('\"id\":2');",
+									"    pm.expect(pm.response.text()).to.include('\"id\":3');",
+									"    pm.expect(pm.response.text()).to.include('\"id\":4');",
+									"    pm.expect(pm.response.text()).to.include('\"id\":5');",
+									"    pm.expect(pm.response.text()).to.include('\"id\":6');",
+									"});",
+									"",
+									"pm.test(\"Users returned per page\", function () {",
+									"    pm.expect(pm.response.text()).to.include('\"per_page\":6');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_Base}}/api/users?page=1",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UserNotFound",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"User not found\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"pm.test(\"User id 23 not returned\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include('\"id\":23');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_Base}}/api/users/23",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"23"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateSomeDataUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully updated user\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User data update successfully returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include('\"job\":\"QA\"');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"job\": \"QA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_Base}}/api/users/1",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateAllDataUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully updated user\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"User data update successfully returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include('\"name\":\"Val\"');",
+									"    pm.expect(pm.response.text()).to.include('\"job\":\"QA\"');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Val\",\n    \"job\": \"QA\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_Base}}/api/users/1",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully delete user\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_Base}}/api/users/2",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successfully login\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Token returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"token\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": \"cityslicka\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_Base}}/api/login",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginWithoutPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unsuccessfully login\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Token not returned\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"token\");",
+									"});",
+									"",
+									"pm.test(\"Message missing password returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include('\"error\":\"Missing password\"');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"eve.holt@reqres.in\",\n    \"password\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_Base}}/api/login",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginUserInvalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unsuccessfully login\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Token not returned\", function () {",
+									"    pm.expect(pm.response.text()).to.not.include(\"token\");",
+									"});",
+									"",
+									"pm.test(\"Message missing password returned\", function () {",
+									"    pm.expect(pm.response.text()).to.include('\"error\":\"user not found\"');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"val@teste.com\",\n    \"password\": \"teste123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_Base}}/api/login",
+							"host": [
+								"{{URL_Base}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
